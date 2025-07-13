@@ -76,7 +76,7 @@ console.log(bookmarkedMovies)
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer YOUR_API_KEY'
+      Authorization: 'Bearer e608951bb7f29960de358fc0b86c5e67'
     }
   };
 
@@ -171,7 +171,7 @@ fetchMovies();
 <div className='bg-gray-900  z-0 min-h-screen w-screen overflow-hidden'   >
 <div>
 <h1 className='md:text-4xl text-2xl pl-24 md:pl-27 md:pl-45 bg-gray-900  text-white w-full h-17 pt-4'>Trending</h1>
-   <div className=' text-blue-600  gap-9 overflow-x-auto bg-gray-900 flex w-screen md:pl-40   whitespace-nowrap no-scrollbar'>
+   <div className=' text-blue-600  gap-9 overflow-x-auto bg-gray-900 flex w-screen md:pl-30   whitespace-nowrap no-scrollbar'>
 {movies.map((movie) => (
     <div key={movie.id}>
       <Trend {...movie} onBookmark={() => handleBookmarkClick(movie)} onDropbook={()=>filterBook(movie)} isBookmark={bookmarkedMovies.some(m => m.id === movie.id)}  hanleClick={()=>getData(movie)}/>
@@ -181,7 +181,7 @@ fetchMovies();
 
 <div>
 <h1 className='md:text-4xl text-center text-2xl  ml-[-50px] md:text-left md:pl-45 bg-gray-900  text-white w-full h-17 pt-14'>Recommended for you </h1>
-<div className=' text-blue-600 justify-center flex-row gap-5  flex-wrap flex overflow-y-auto w-screen pt-10 mx-auto items-center whitespace-nowrap no-scrollbar'>
+<div className=' text-blue-600 justify-center flex-row gap-5 pl-10  flex-wrap flex overflow-y-auto w-screen pt-10 mx-auto items-center whitespace-nowrap no-scrollbar'>
 {move.map((movie)=>(<div ><Tree {...movie} key={movie.id} onBookmark={() => handleBookmarkClick(movie)} onDropbook={()=>filterBook(movie)} isBookmark={bookmarkedMovies.some(m => m.id === movie.id)} hanleClick={()=>getData(movie)}/></div>))}
     </div>
 </div>    
