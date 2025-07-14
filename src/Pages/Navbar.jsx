@@ -9,17 +9,17 @@ import { IoBookmarkSharp } from "react-icons/io5";
 import { MdLocalMovies } from "react-icons/md";
 import { FaTimes } from "react-icons/fa";
 import {auth} from './firebase'; // Adjust the import path as necessary
-function Navbar() {
+function Navbar({onLogin}) {
   const Location = useLocation()
   const [isOpen, setIsOpen] = useState(false);
   const [hambug, setHambug] = useState(true);
   const toggleMenu = () => {
     setIsOpen(!isOpen); setHambug(!hambug);};
- async function handleLogout() {
+ const  handleLogout = async()=> {
+  
   try{
     await auth.signOut();
-    console.log("User logged out successfully");
-    window.location.href = '/login'; // Redirect to home page after logout
+    console.log("User logged out successfully"); // Redirect to home page after logout
   }
   catch (error) {
     console.error("Error logging out:", error);
@@ -122,7 +122,10 @@ function Navbar() {
 
   <button
     className="h-8 text-center text-white w-20 bg-[#e50914] mt-auto mx-auto mb-8 rounded font-semibold hover:bg-red-700 transition duration-300 cursor-pointer"
-    onClick={handleLogout}
+    
+    onClick={()=>{handleLogout;
+      onLogin();
+    }}
   >
     Logout
   </button>

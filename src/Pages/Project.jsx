@@ -49,19 +49,19 @@ const Tree = (prop) => {
       </div>
 
   
-      <div className="px-8 md:px-20 py-10 flex flex-col gap-6 max-w-4xl mx-auto">
+      <div className="px-8 md:px-20 py-10 flex flex-col gap-9 max-w-4xl mx-auto">
         
-    <div className="flex flex-col md:flex-row gap-6 md:gap-9 justify-center items-center text-center mx-auto w-full px-4">
+    <div className="flex  gap-9 md:gap-7 justify-center items-center text-center mx-auto w-full px-4">
   <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-wide text-white">
     {prop.title || prop.original_title || prop.original_name}
   </h1>
 
   <div 
-    className="text-black cursor-pointer hover:text-red-700 bg-white flex gap-2 sm:gap-4 w-full sm:w-auto h-12 mt-3 text-center justify-center items-center rounded-full px-4"
+    className="text-black cursor-pointer md:w-50 hover:text-red-700 bg-white flex gap-2 sm:gap-4  sm:w-auto h-12 mt-3 text-center justify-center items-center rounded-full px-2"
     onClick={openYouTubeTrailer}
   >
     <PiPlayFill className="hover:text-blue-400 transition-transform transform hover:scale-110" size={28} />
-    <p className="text-base sm:text-[20px] font-semibold">Play trailer</p>
+    <p className=" sm:text-[17px] font-semibold">Play trailer</p>
   </div>
 </div>
         

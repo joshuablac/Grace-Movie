@@ -15,7 +15,15 @@ import Signup from './Component/Signup'
 import { doc,setDoc, } from 'firebase/firestore'
 import { useState } from 'react'
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  return localStorage.getItem('isLoggedIn') === 'true';
+});
+  if(isLoggedIn){
+    localStorage.setItem('isLoggedIn', 'true')
+  }
+  else{
+    localStorage.removeItem('isLoggedIn');
+  }
   const fetchUserData = async () => {
 const options = {
   method: 'GET',
@@ -87,7 +95,7 @@ console.error('There has been a problem with your fetch operation:', error);
         <>
 <div className=' bg-gray-900  md:justify-left md:items-left justify-center  text-center '>
           <Buttons/>
-  <Navbar />
+  <Navbar  onLogin={() => setIsLoggedIn(false)}/>
   
         </div>
         
@@ -101,6 +109,7 @@ console.error('There has been a problem with your fetch operation:', error);
             <Route path="/tvicons" element={<Contact />} />
             <Route path = "/foot" element={<Footer/>}/>
             <Route path="/shows" element={<About/>} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </>
       )}

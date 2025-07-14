@@ -60,6 +60,7 @@ const filterBook =async(movie)=>{
 const getData =async(move)=>{
 
 setDetails([move])
+window.location.href = './project'
 
  await setDoc(doc(db, 'accomodations','10'), {
       details:move, // Or save entire 'responses' array if you prefer
@@ -71,51 +72,55 @@ setDetails([move])
 console.log(bookmarkedMovies)
 
   const functiondata = async () => {
-    const recommendations = []
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer e608951bb7f29960de358fc0b86c5e67'
-    }
-  };
-
-  let totalPages = 2;
-  const fetchPromises = [];
-
-  for (let i = 1; i <= totalPages; i++) {
-    const url = `https://api.themoviedb.org/3/movie/550/recommendations?language=en-US&page=${i}`;
-    fetchPromises.push((fetch(url, options).then(res =>res.json())));
-  }
-
-  const responses = await Promise.all(fetchPromises);
-
-  responses.forEach(res => {
-    if (res.results && Array.isArray(res.results)) {
-      recommendations.push(...res.results);
-    }
-  });
-
-  console.log("✅ Recommendations to store:", recommendations);
-
-  try {
-    const movieRef = doc(db, "movies2", "550");
-    await setDoc(movieRef, { recommendations });  // match the name exactly
-    console.log(" Recommendations stored successfully!");
-  } catch (error) {
-    console.error("Error storing recommendations:", error);
-  }
-};
-
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjA4OTUxYmI3ZjI5OTYwZGUzNThmYzBiODZjNWU2NyIsIm5iZiI6MTc1MTYzMTY1NS44MzAwMDAyLCJzdWIiOiI2ODY3YzcyNzA2YjgyNzQ2NmU1M2I4YTIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.7dHa7DBREfgiJkB7wiCYLMDJFv2LBXLDcYMBtpaQyBA' //
+        }
+      };
+  
+      let totalPages = 4;
+      const fetchPromises = [];
+  
+      for (let i = 1; i <= totalPages; i++) {
+        const url = `https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=${i}`;
+        fetchPromises.push(fetch(url, options).then(res => res.json()));
+      }
+  
+      const forbiddenGenres = [27, 53, 80, 9648, 99, 10764, 10766, 10749];
+      const blacklist = ['sex', 'erotic', 'evil', 'lust', 'sin', 'sinners', 'horror', 'curse', 'thriller', 'demon', 'witch', 'kill', 'murder', 'love', 'romance', 'romantic', 'affair', 'affairs', 'mistress'];
+  
+      const responses = await Promise.all(fetchPromises);
+  
+      const allMovies = responses.flatMap(res => res.results)
+        .filter(tv =>
+          !tv.genre_ids?.some(id => forbiddenGenres.includes(id)) &&
+          !blacklist.some(word =>
+            (tv.name || '').toLowerCase().includes(word) ||
+            (tv.original_name || '').toLowerCase().includes(word) ||
+            (tv.overview || '').toLowerCase().includes(word)
+          )
+        );
+  
+      try {
+        const movieRef = doc(db, "movies2", "550");
+        await setDoc(movieRef, { allMovies });
+      } catch (error) {
+        console.error("Error storing recommendations:", error);
+      }
+    };
 const movieRecommendation = async () => {
   const moviedot = doc(db, "movies2", "550");
   const snapshot = await getDoc(moviedot);
 
+
   if (snapshot.exists()) {
     const data = snapshot.data();
     console.log("Full Data:", data);
-    console.log("Fetched Recommendations:", data.recommendations);
-    return setmove(data.recommendations);
+    console.log("Fetched Recommendations:", data.allMovies);
+    console.log(data.allMovies)
+    return setmove(data.allMovies);
   } else {
     console.log(" Document not found");
     return [];
@@ -170,7 +175,7 @@ fetchMovies();
       <ToastContainer/>
 <div className='bg-gray-900  z-0 min-h-screen w-screen overflow-hidden'   >
 <div>
-<h1 className='md:text-4xl text-2xl pl-24 md:pl-27 md:pl-45 bg-gray-900  text-white w-full h-17 pt-4'>Trending</h1>
+<h1 className='md:text-4xl text-2xl pl-24 md:pl-27 bg-gray-900  text-white w-full h-17 pt-4'>Trending</h1>
    <div className=' text-blue-600  gap-9 overflow-x-auto bg-gray-900 flex w-screen md:pl-30   whitespace-nowrap no-scrollbar'>
 {movies.map((movie) => (
     <div key={movie.id}>
@@ -181,7 +186,7 @@ fetchMovies();
 
 <div>
 <h1 className='md:text-4xl text-center text-2xl  ml-[-50px] md:text-left md:pl-45 bg-gray-900  text-white w-full h-17 pt-14'>Recommended for you </h1>
-<div className=' text-blue-600 justify-center flex-row gap-5 pl-10  flex-wrap flex overflow-y-auto w-screen pt-10 mx-auto items-center whitespace-nowrap no-scrollbar'>
+<div className=' text-blue-600 justify-center flex-row gap-4 pl-10  flex-wrap flex overflow-y-auto w-screen pt-10 mx-auto items-center whitespace-nowrap no-scrollbar'>
 {move.map((movie)=>(<div ><Tree {...movie} key={movie.id} onBookmark={() => handleBookmarkClick(movie)} onDropbook={()=>filterBook(movie)} isBookmark={bookmarkedMovies.some(m => m.id === movie.id)} hanleClick={()=>getData(movie)}/></div>))}
     </div>
 </div>    
@@ -214,10 +219,10 @@ const Trend =(prop)=>{
   };
 return(
   <>
-  <Link to="/project" onClick={prop.hanleClick} >
+  <div onClick={prop.hanleClick} >
   <div className="relative w-75 md:w-120  h-48 md:h-68 text-white overflow-hidden shadow-lg group bg-gray-900 p-4 flex flex-col justify-between " >
   <img className=" w-75 md:w-110 rounded-xl h-78  object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out" src={`https://image.tmdb.org/t/p/w500/${prop.poster_path}`} alt={prop.title} />
-<Link className={`absolute top-6 right-8 bg-gray-800 bg-opacity-60 p-2 rounded-full text-white hover:bg-opacity-80 transition ${clicked ? 'bg-red-700' : 'bg-gray-800 bg-opacity-60 hover:bg-opacity-80'} `} onClick={(e) => { e.stopPropagation(); e.preventDefault; handleClick(); }}><IoBookmarkSharp size={18}/></Link>
+<button className={`absolute top-6 right-8 bg-gray-800 bg-opacity-60 p-2 rounded-full text-white hover:bg-opacity-80 transition ${clicked ? 'bg-red-700' : 'bg-gray-800 bg-opacity-60 hover:bg-opacity-80'} `} onClick={(e) => { e.stopPropagation(); e.preventDefault; handleClick(); }}><IoBookmarkSharp size={18}/></button>
 <div className="flex items-left  pl-10 text-sm md:mt-[-130px] mt-[-0px] gap-4 opacity-95">
   <h4>{prop.release_date.slice(0,4)}</h4>
   <h5 className="text-sm font-semibold leading-tight truncate">{prop.movie_vote}</h5>
@@ -226,7 +231,7 @@ return(
 </div>
 <h1 className="text-2xl text-white  font-semibold leading-tight truncate flex items-left  pl-10">{prop.title}</h1>
 </div>
-  </Link>
+  </div>
 
   </>
 )
@@ -244,23 +249,23 @@ const Tree =(prop)=>{
   };
 return(
   <>
-  <Link to="/project" onClick={prop.hanleClick} >
+  <div onClick={prop.hanleClick} >
   
-  <div className="relative w-90   h-68 md:h-83 text-white overflow-hidden group bg-gray-900 p-4 flex flex-col justify-between gap-4 ">
-  <img className=" w-90  rounded-xl h-48  object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out" src={`https://image.tmdb.org/t/p/w500/${prop.backdrop_path}`} alt={prop.title} />
-<Link className={`absolute top-6 right-10 bg-gray-800 bg-opacity-60 p-2 rounded-full text-white hover:bg-opacity-80 transition ${clicked ? 'bg-red-700' : 'bg-gray-800 bg-opacity-60 hover:bg-opacity-80'} `} onClick={(e) => { e.stopPropagation();e.preventDefault; handleClick(); }}><IoBookmarkSharp size={18}/></Link>
+  <div className="relative w-90   h-98 md:h-83 text-white overflow-hidden group bg-gray-900 p-4 flex flex-col justify-between gap-4 ">
+  <img className=" w-90  rounded-xl h-68  object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out" src={`https://image.tmdb.org/t/p/w500/${prop.backdrop_path}`} alt={prop.title} />
+<div className={`absolute top-6 right-10 bg-gray-800 bg-opacity-60 p-2 rounded-full text-white hover:bg-opacity-80 transition ${clicked ? 'bg-red-700' : 'bg-gray-800 bg-opacity-60 hover:bg-opacity-80'} `} onClick={(e) => { e.stopPropagation();e.preventDefault; handleClick(); }}><IoBookmarkSharp size={18}/></div>
 <div>
   <div className="flex items-left  pl-5 text-sm  mt-[-0px] gap-4 opacity-95">
-  <h4>{prop.release_date.slice(0,4)}</h4>
+  <h4>{prop.first_air_date.slice(0,4)}</h4>
   <h5 className="text-sm font-semibold leading-tight truncate">{prop.movie_vote}</h5>
 <p className='flex text-sm'><MdLocalMovies className='mt-1'/>{prop.movie_type}</p>
 <p>PG</p>
 </div>
-<h1 className="text-2xl text-white  font-semibold leading-tight truncate flex items-left  pl-5">{prop.title.slice(0,23)}</h1>
+<h1 className="text-2xl text-white  font-semibold leading-tight truncate flex items-left  pl-5">{prop.name.slice(0,23)}</h1>
 
   </div>
   </div>
-  </Link>
+  </div>
 
   </>
 )
