@@ -252,7 +252,7 @@ return(
   <div onClick={prop.hanleClick} >
   
   <div className="relative w-90   h-98 md:h-83 text-white overflow-hidden group bg-gray-900 p-4 flex flex-col justify-between gap-4 ">
-  <img className=" w-90  rounded-xl h-68  object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out" src={`https://image.tmdb.org/t/p/w500/${prop.backdrop_path}`} alt={prop.title} />
+  <img className=" w-90  rounded-xl h-68  object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out" src={`https://image.tmdb.org/t/p/w500/${prop.backdrop_path || prop.poster_path}`} alt={prop.title} />
 <div className={`absolute top-6 right-10 bg-gray-800 bg-opacity-60 p-2 rounded-full text-white hover:bg-opacity-80 transition ${clicked ? 'bg-red-700' : 'bg-gray-800 bg-opacity-60 hover:bg-opacity-80'} `} onClick={(e) => { e.stopPropagation();e.preventDefault; handleClick(); }}><IoBookmarkSharp size={18}/></div>
 <div>
   <div className="flex items-left  pl-5 text-sm  mt-[-0px] gap-4 opacity-95">

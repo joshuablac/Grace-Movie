@@ -57,7 +57,7 @@ const Tree = (prop) => {
   </h1>
 
   <div 
-    className="text-black cursor-pointer md:w-50 hover:text-red-700 bg-white flex gap-2 sm:gap-4  sm:w-auto h-12 mt-3 text-center justify-center items-center rounded-full px-2"
+    className="text-black cursor-pointer md:w-70 hover:text-red-700 bg-white flex gap-1 sm:gap-3  sm:w-auto h-12 mt-3 text-center justify-center items-center rounded-full px-2"
     onClick={openYouTubeTrailer}
   >
     <PiPlayFill className="hover:text-blue-400 transition-transform transform hover:scale-110" size={28} />
