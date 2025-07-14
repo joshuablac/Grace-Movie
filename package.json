@@ -1,9 +1,10 @@
 {
   "name": "portfolio-project",
   "private": true,
+  "homepage": "https://joshuaolugbenga.github.io/Grace-Movie/",
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://joshuaolugbenga.github.io/Grace-Movie",
+  
   "scripts": {
     "dev": "vite",
     "build": "vite build",
