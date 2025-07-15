@@ -12,9 +12,11 @@ import { collection,setDoc,query} from 'firebase/firestore';
 import { db ,auth} from './firebase';
 import { limit } from 'firebase/firestore';  // Adjust the import path as necessary
 const Home = () => {
+
   const [fullDetails,setDetails]=useState([])
   const  [movies, setMovies] = useState([]);
   const  [move, setmove]= useState([])
+  const userUid = localStorage.getItem('myUserId');
   const [bookmarkedMovies, setBookmarkedMovies] = useState([]);
 
   const handleBookmarkClick = async(moviee) => {
@@ -24,7 +26,7 @@ setBookmarkedMovies(prev => {
     const update =  [...prev, moviee];
     console.log(update)
     const books = async()=>{
-const savebook = doc(db,'moviseBook',"100")
+const savebook = doc(db,'moviseBook',userUid)
      await setDoc(savebook,{
       details:update,
     })
@@ -34,7 +36,7 @@ const savebook = doc(db,'moviseBook',"100")
   });
 };
 const filterBook =async(movie)=>{
- const savebook = doc(db, "moviseBook","100");  // Use user ID as document name
+ const savebook = doc(db, "moviseBook",userUid);  // Use user ID as document name
 
   const snap = await getDoc(savebook);
   const existingBookmarks = snap.exists() ? snap.data().details || [] : [];
@@ -62,7 +64,7 @@ const getData =async(move)=>{
 setDetails([move])
 window.location.href = './project'
 
- await setDoc(doc(db, 'accomodations','10'), {
+ await setDoc(doc(db, 'accomodations',userUid), {
       details:move, // Or save entire 'responses' array if you prefer
     });
     console.log("Saved")
@@ -145,6 +147,7 @@ const movieRecommendation = async () => {
 
 
 useEffect(()=>{
+  console.log(userUid)
   movieRecommendation()
   functiondata()
   const fetchMovies = async () => {

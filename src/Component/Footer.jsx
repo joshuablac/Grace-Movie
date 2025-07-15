@@ -6,8 +6,9 @@ import { MdLocalMovies } from "react-icons/md";
 import { db } from '../Pages/firebase';
 const Footer = () => {
   const  [movies, setMovies] = useState([]);
+  const userUid = localStorage.getItem('myUserId');
   const movieRecommendation = async () => {
-    const moviedot = doc(db,'moviseBook',"100");
+    const moviedot = doc(db,'moviseBook',userUid);
     const snapshot = await getDoc(moviedot);
   
     if (snapshot.exists()) {
@@ -21,7 +22,7 @@ const Footer = () => {
     }
   };
   const getData =async(move)=>{
-   await setDoc(doc(db, 'accomodations','10'), {
+   await setDoc(doc(db, 'accomodations',userUid), {
         details:move, // Or save entire 'responses' array if you prefer
       });
       console.log("Saved")

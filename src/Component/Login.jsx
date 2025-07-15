@@ -15,6 +15,7 @@ const handleSubmit= async(e)=>{
     .then(() => {
       // Signed in successfully
       const user = auth.user;
+      console.log(user)
       console.log("User signed in:", user);
         toast.success("Login successful!", {
             position: 'top-center',
@@ -41,7 +42,7 @@ const handleSubmit= async(e)=>{
     return (
     <>
     
-    <div className='flex flex-col gap-10 md:gap-1 items-center justify-center min-h-screen bg-[url("./assets/home_bg.png")] bg-cover bg-center bg-no-repeat bg-opacity-80'>
+    <div className='flex overflow-hidden flex-col gap-10 md:gap-1 items-center justify-center min-h-screen bg-[url("./assets/home_bg.png")] bg-cover bg-center bg-no-repeat bg-opacity-80'>
     <div className='text-white text-center md:text-6xl sm:text-6xl font-bold md:py-6'><p className='md:text-6xl sm:text-6xl font-bold md:py-6'>Unlimited movies,</p>
     <ReactTyped strings ={['TV', 'Shows','and more.']} typeSpeed={200}backSpeed={100}  backDelay={7000} loop={true} />
     </div>

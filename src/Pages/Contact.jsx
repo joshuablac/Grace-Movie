@@ -10,13 +10,14 @@ const Contact = () => {
   const [fullDetails, setDetails] = useState([]);
   const [bookmarkedMovies, setBookmarkedMovies] = useState([]);
 console.log(fullDetails)
+const userUid = localStorage.getItem('myUserId');
   const handleBookmarkClick = async (moviee) => {
     setBookmarkedMovies(prev => {
       const isAlreadyAdded = prev.some(m => m.id === moviee.id);
       if (isAlreadyAdded) return prev;
       const update = [...prev, moviee];
       const books = async () => {
-        const savebook = doc(db, 'moviseBook', "100");
+        const savebook = doc(db, 'moviseBook',userUid);
         await setDoc(savebook, {
           details: update,
         });
@@ -27,7 +28,7 @@ console.log(fullDetails)
   };
 
   const filterBook = async (movie) => {
-    const savebook = doc(db, "moviseBook", "100");
+    const savebook = doc(db, "moviseBook",userUid);
     const snap = await getDoc(savebook);
     const existingBookmarks = snap.exists() ? snap.data().details || [] : [];
     const isAlreadyBookmarked = existingBookmarks.some(m => m.id === movie.id);
@@ -48,7 +49,7 @@ console.log(fullDetails)
   const getData = async (move) => {
     setDetails([move]);
     window.location.href = './project'
-    await setDoc(doc(db, 'accomodations', '10'), {
+    await setDoc(doc(db, 'accomodations',userUid), {
       details: move,
     });
   };

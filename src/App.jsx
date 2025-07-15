@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import { useEffect } from 'react'
 import {Route, Routes,Navigate, } from 'react-router-dom'
-import {db,} from './firebase' // Adjust the import path as necessary
+import {db,auth} from './firebase' // Adjust the import path as necessary
 import Login from "./Component/login"
 import About from "./Pages/About"
 import Contact from "./Pages/Contact"
@@ -18,12 +18,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
   return localStorage.getItem('isLoggedIn') === 'true';
 });
-  if(isLoggedIn){
-    localStorage.setItem('isLoggedIn', 'true')
-  }
-  else{
-    localStorage.removeItem('isLoggedIn');
-  }
   const fetchUserData = async () => {
 const options = {
   method: 'GET',
@@ -75,7 +69,18 @@ console.error('There has been a problem with your fetch operation:', error);
 }
   }
   useEffect(() => {
-    fetchUserData();
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if (user) {
+    localStorage.setItem('isLoggedIn', 'true')
+
+}
+else{
+    localStorage.removeItem('isLoggedIn');
+  }
+})
+return () => unsubscribe(),fetchUserData();
+
+
   }, []);
    return (
 

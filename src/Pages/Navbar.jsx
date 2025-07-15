@@ -19,6 +19,7 @@ function Navbar({onLogin}) {
   
   try{
     await auth.signOut();
+    localStorage.removeItem('myUserId');
     console.log("User logged out successfully"); // Redirect to home page after logout
   }
   catch (error) {
@@ -123,7 +124,7 @@ function Navbar({onLogin}) {
   <button
     className="h-8 text-center text-white w-20 bg-[#e50914] mt-auto mx-auto mb-8 rounded font-semibold hover:bg-red-700 transition duration-300 cursor-pointer"
     
-    onClick={()=>{handleLogout;
+    onClick={async()=>{await handleLogout();;
       onLogin();
     }}
   >

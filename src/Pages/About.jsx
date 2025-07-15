@@ -8,6 +8,7 @@ import { doc, setDoc, getDoc, updateDoc, arrayRemove, arrayUnion } from 'firebas
 const About = () => {
   const [movies, setMovies] = useState([]);
   const [fullDetails, setDetails] = useState([]);
+  const userUid = localStorage.getItem('myUserId');
   const [bookmarkedMovies, setBookmarkedMovies] = useState([]);
 console.log(fullDetails)
   const handleBookmarkClick = async (movie) => {
@@ -16,7 +17,7 @@ console.log(fullDetails)
       if (isAlreadyAdded) return prev;
       const updated = [...prev, movie];
       const books = async () => {
-        const savebook = doc(db, 'moviseBook', "100");
+        const savebook = doc(db, 'moviseBook', userUid);
         await setDoc(savebook, { details: updated });
       };
       books();
@@ -25,7 +26,7 @@ console.log(fullDetails)
   };
 
   const filterBook = async (movie) => {
-    const savebook = doc(db, "moviseBook", "100");
+    const savebook = doc(db, "moviseBook",userUid);
     const snap = await getDoc(savebook);
     const existingBookmarks = snap.exists() ? snap.data().details || [] : [];
     const isAlreadyBookmarked = existingBookmarks.some(m => m.id === movie.id);
@@ -46,7 +47,7 @@ console.log(fullDetails)
   const getData = async (movie) => {
     setDetails([movie]);
     window.location.href = './project'
-    await setDoc(doc(db, 'accomodations', '10'), { details: movie });
+    await setDoc(doc(db, 'accomodations',userUid), { details: movie });
   };
 
   const functiondata = async () => {
