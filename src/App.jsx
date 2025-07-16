@@ -3,7 +3,7 @@ import './App.css';
 import { useEffect } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { db, auth } from './firebase'; // Adjust the import path as necessary
-import Login from './component/login';
+import Login from './component/Login';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Project from './pages/Project';
